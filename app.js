@@ -1,63 +1,68 @@
-let userScore = 0;
-let compScore = 0;
+let boxes=document.querySelectorAll(".box");
+let resetbutton=document.querySelectorAll("#Reset");
+let newGameBtn=document.querySelector("#new-btn");
+let msgContainer=document.querySelector(".msg-container");
+let msg=document.querySelector("#msg");
+let turnO=true;//playerX,playerO
+const winPatterns=[[0,1,2],[0,3,6],[0,4,8],[1,4,7],[2,5,8],[2,4,6],[3,4,5],[6,7,8]];
+const resetGame=()=>{
+    turnO=true;
+    enableBoxes();
+    msgContainer.classList.add("hide");
+}
+boxes.forEach((box)=>{
+    box.addEventListener("click",()=>{
+        if(turnO){
+            box.innerText="O";
+            turnO=false;
+        }else{
+            box.innerText="X";
+            turnO=true;
+        }
+        box.disabled=true;
+        checkwinner();
+       
 
-const choices = document.querySelectorAll(".choice");
-const msg = document.querySelector("#msg");
-
-const userScorePara = document.querySelector("#user-score");
-const compScorePara = document.querySelector("#comp-score");
-
-const genCompChoice = () => {
-  const options = ["rock", "paper", "scissors"];
-  const randIdx = Math.floor(Math.random() * 3);
-  return options[randIdx];
-};
-
-const drawGame = () => {
-  msg.innerText = "Game was Draw. Play again.";
-  msg.style.backgroundColor = "#081b31";
-};
-
-const showWinner = (userWin, userChoice, compChoice) => {
-  if (userWin) {
-    userScore++;
-    userScorePara.innerText = userScore;
-    msg.innerText = `You win! Your ${userChoice} beats ${compChoice}`;
-    msg.style.backgroundColor = "green";
-  } else {
-    compScore++;
-    compScorePara.innerText = compScore;
-    msg.innerText = `You lost. ${compChoice} beats your ${userChoice}`;
-    msg.style.backgroundColor = "red";
-  }
-};
-
-const playGame = (userChoice) => {
-  //Generate computer choice
-  const compChoice = genCompChoice();
-
-  if (userChoice === compChoice) {
-    //Draw Game
-    drawGame();
-  } else {
-    let userWin = true;
-    if (userChoice === "rock") {
-      //scissors, paper
-      userWin = compChoice === "paper" ? false : true;
-    } else if (userChoice === "paper") {
-      //rock, scissors
-      userWin = compChoice === "scissors" ? false : true;
-    } else {
-      //rock, paper
-      userWin = compChoice === "rock" ? false : true;
-    }
-    showWinner(userWin, userChoice, compChoice);
-  }
-};
-
-choices.forEach((choice) => {
-  choice.addEventListener("click", () => {
-    const userChoice = choice.getAttribute("id");
-    playGame(userChoice);
-  });
+    });
 });
+const disableBoxes=()=>{
+    for(box of boxes){
+        box.disabled=true;
+
+    }
+    
+}
+const enableBoxes=()=>{
+    for(box of boxes){
+        box.disabled=false;
+        box.innerText="";
+
+    }
+    
+}
+const showWinnner=(winner) =>{
+    msg.innerText=`Congratulations,Winner is ${winner}`;
+    msgContainer.classList.remove("hide");
+    disableBoxes();
+}
+const checkwinner=()=>{
+    for(let patterns of winPatterns){
+        let pos1Val=boxes[patterns[0]].innerText;
+        let pos2Val=boxes[patterns[1]].innerText;
+        let pos3Val=boxes[patterns[2]].innerText;
+
+        if(pos1Val!=""&&pos2Val !=""&&pos3Val !=""){
+            if(pos1Val==pos2Val&&pos2Val==pos3Val){
+                
+                
+                showWinnner(pos1Val);
+            }
+        }
+        
+    } 
+};
+newGameBtn.addEventListener("click",resetGame);
+Reset.addEventListener("click",resetGame);
+
+
+
