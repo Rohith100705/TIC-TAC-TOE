@@ -1,6 +1,6 @@
 # TIC-TAC-TOE
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/rohith100705/TIC-TAC-TOE.git
-git push -u origin main
+
+TIC-TAC-TOE
+
+View live at:https://rohith100705.github.io/TIC-TAC-TOE/
+
